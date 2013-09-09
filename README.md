@@ -76,6 +76,10 @@ password:gogoreader
 	)
     --because we only fetch the weibo sharecount and comment count where the is url is fresh 12h.
 	alter table links_link add index idx_published_time(published_time);
+
+	抓取RSS和微博分享、评论定时脚本
+	00 7,10,12,15,18,20 * * * python /root/hotread/social/ggweibo.py >>/root/log/ggweibo.log 2>&1
+    00 * * * * python /root/hotread/feed/feed_mutli.py >>/root/log/feed_mutli.log 2>&1
 ###依赖
 
 * [django version:1.5.2](https://www.djangoproject.com/)
