@@ -66,9 +66,10 @@ def main():
     max_id = cursor.fetchone()[0]
 
     index=0
+    strlimittime = (datetime.datetime.now() - datetime.timedelta(hours=12)).strftime('%Y-%m-%d %H:%m')
     while(index<=max_id):
         cursor.execute("select id,published_time,url,short_url,weibo_sharecount,weibo_commentcount from links_link "
-                       "where id>%d order by id asc limit %d"%(index,STEP))
+                       "where published_time>'%s' id>%d order by id asc limit %d"%(strlimittime,index,STEP))
         result = cursor.fetchall()
         for id,published_time,url,short_url,weibo_sharecount,weibo_commentcount in result:
             try:
@@ -79,8 +80,10 @@ def main():
                     short_url = get_shorturl(api,url)
                 weibo_sharecount_new = int(get_sharecount(api,short_url))
                 weibo_commentcount_new = int(get_commentcount(api,short_url))
+                ##because the weibo limit the request,so now we just get the repost count,and ignore the comment count.
+                ##weibo_commentcount_new = 0
 
-                #print short_url,weibo_sharecount_new,weibo_commentcount_new
+                print short_url,weibo_sharecount_new,weibo_commentcount_new
 
                 #if the count change or the short url is not initial, just update it.
                 if( short_url_none or weibo_sharecount != weibo_sharecount_new

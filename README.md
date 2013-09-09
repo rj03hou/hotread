@@ -74,6 +74,8 @@ password:gogoreader
 	KEY `links_rsssource_5659cca2` (`tag_id`),
 	CONSTRAINT `tag_id_refs_id_76b63e16` FOREIGN KEY (`tag_id`) REFERENCES `links_tag` (`id`)
 	)
+    --because we only fetch the weibo sharecount and comment count where the is url is fresh 12h.
+	alter table links_link add index idx_published_time(published_time);
 ###依赖
 
 * [django version:1.5.2](https://www.djangoproject.com/)
