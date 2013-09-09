@@ -76,19 +76,25 @@ password:gogoreader
 	)
 ###依赖
 
-[django version:1.5.2](https://www.djangoproject.com/)
+* [django version:1.5.2](https://www.djangoproject.com/)
 
-[django-registration:1.0](https://pypi.python.org/packages/source/d/django-registration/django-registration-1.0.tar.gz)
+* [django-registration:1.0](https://pypi.python.org/packages/source/d/django-registration/django-registration-1.0.tar.gz)
 
-[feedparser](https://code.google.com/p/feedparser/) pip install feedparser
+* [feedparser](https://code.google.com/p/feedparser/) 
+	
+		pip install feedparser
 
-[OPML解析类](http://blog.donews.com/limodou/archive/2005/12/25/670385.aspx)
+* [OPML解析类](http://blog.donews.com/limodou/archive/2005/12/25/670385.aspx)
 
-[steel-rumors](https://github.com/arocks/steel-rumors)
+* [steel-rumors](https://github.com/arocks/steel-rumors)
 
-mysql-connector-python pip install mysql-connector-python
+* mysql-connector-python
+	
+		pip install mysql-connector-python
 
-sinaweibopy pip install sinaweibopy
+* sinaweibopy 
+
+		pip install sinaweibopy
 
 #未实现功能清单
 * rss源的录入页面
