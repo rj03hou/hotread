@@ -1,0 +1,89 @@
+.content {
+  font-size: 16px;
+  text-align: left;
+  padding: 5px 5px 5px 5px;
+}
+
+.content li{
+  height:35px;
+  margin:5px;
+  padding:4px;
+}
+
+.content li.list span {
+  padding: 5px 5px 10px 10px;
+}
+
+.content li.list span.link_list_id {
+  width: 15px;
+}
+
+.content div.small{
+  margin:4px 4px;
+  padding: 15px
+  font-size: x-small;
+  color : #888;
+}
+
+
+.content li.list span.link_list_description {
+  width: 60px;
+  margin-left:5px;
+}
+
+.content li.list img_attr{
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+
+.content li.list span.link_list_title {
+  width: 60px;
+  margin-left:5px;
+}
+
+.content li.list span.link_list_rank_score {
+  width: 20px;
+  margin-left:5px;
+}
+
+.content li.list span.link_list_submitter {
+  width: 40px;
+  margin-left:5px;
+}
+
+.content li.list span.link_list_submitted_on {
+  width: 50px;
+  margin-left:5px;
+}
+
+.content li span.link_list_submitted_on {
+  width: 50px;
+  margin-left:5px;
+}
+
+.submit-button {
+  background-color: #eb4924;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 5px 0 5px;
+  text-align: center;
+  width: 150px;
+  box-shadow: 0 14px 4px -10px #333;
+}
+
+
+

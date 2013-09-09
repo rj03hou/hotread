@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load comments %}
+
+<link href="{{ STATIC_URL }}css/show.css" rel="stylesheet" type="text/css" media="screen" />
+
+{% block content %}
+{% if tag_list %}
+    {% for tag in tag_list %}
+        <span class="tag">
+            <a href="{% url 'link_tag' pk=tag.pk %}">
+                {{ tag.name }}
+            </a>
+        </span> -
+    {% endfor %}
+{% endif %}
+{% if content_list %}
+    <div class="content">
+        <ul>
+            {% for content in content_list %}
+                 <li type="1" class="list">
+                    <span><a id="{{content.link.id}}" onclick="return vote(this)">  <img class="img_attr" src="{{ STATIC_URL }}img/grayarrow.gif" border="0" vspace="3" hspace="2"> </a></span>
+                    <span class="link_list_title"><a href="{{ content.link.url }}">{{ content.link.title }}</a></span>
+                    <span class="link_list_description">{{ content.link.source }}</span>
+                    <br>
+                    <div class = "small">
+                        <form id="myform">
+                            <span class="link_list_rank_score">hot:{{ content.link.rank_score | floatformat:2 }}</span>
+                            <span>微博转发:{{ content.link.weibo_sharecount }}</span>
+                            <span class="link_list_submitter">{{ content.link.submitter }}</span>
+                            <span class="link_list_submitted_on">{{ content.hours }}小时前发表</span>
+                            <span class="link_list_comment">
+                                <a href="{% url 'link_detail' pk=content.link.pk %}">
+			                        {% get_comment_count for content.link as comment_count %}
+			                        {{ comment_count }}条评论
+		                        </a>
+                            </span>
+                            <span class="submit-info">
+                            </span>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% else %}
+    <p>No link_list are available.</p>
+{% endif %}
+
+<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/jquery.min.js" ></script>
+<script type="text/javascript" language="javascript">
+
+function byId(id) {
+    return document.getElementById(id);
+}
+
+    function vote(node) {
+        var v = node.id;
+        byId(v).style.visibility = 'hidden';
+        $.ajax({
+          url: post,
+          type: 'get',
+          dataType: 'json',
+          data: {
+            v: v
+          },
+          success: function(data) {
+            if (data.code !== 200) {
+              alert(data.code);
+            }else
+            {
+              alert('1111');
+            }
+          },
+        });
+    }
+
+</script>
+
+
+{% endblock %}
