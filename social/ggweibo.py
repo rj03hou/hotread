@@ -68,13 +68,19 @@ def main():
     cursor.execute("select max(id) from links_link")
     max_id = cursor.fetchone()[0]
 
-    index=0
     strlimittime = (datetime.datetime.now() - datetime.timedelta(hours=48)).strftime('%Y-%m-%d %H:%m')
+    print "strlimittime:",strlimittime
+    cursor.execute("select id,published_time,url,short_url,weibo_sharecount,weibo_commentcount from links_link " \
+                   "where published_time>'%s'"%(strlimittime))
+    result = cursor.fetchall()
+    print "24'hours url count:",len(result)
+
+    index=0
     while(index<=max_id):
         cursor.execute("select id,published_time,url,short_url,weibo_sharecount,weibo_commentcount from links_link " \
                        "where published_time>'%s' and id>%d order by id asc limit %d"%(strlimittime,index,STEP))
         result = cursor.fetchall()
-        print "24'hours url count:",len(result)
+        print "index",index,len(result)
         for id,published_time,url,short_url,weibo_sharecount,weibo_commentcount in result:
             try:
                 #whether the short url is initial.
