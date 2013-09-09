@@ -86,6 +86,8 @@ password:gogoreader
 
 [steel-rumors](https://github.com/arocks/steel-rumors)
 
+mysql-connector-python pip install mysql-connector-python
+
 #未实现功能清单
 * rss源的录入页面
 * 根据tag进行分类（不同类型的link）
