@@ -80,6 +80,7 @@ password:gogoreader
 
 [django-registration:1.0](https://pypi.python.org/packages/source/d/django-registration/django-registration-1.0.tar.gz)
 
+[feedparser](https://code.google.com/p/feedparser/) pip install feedparser
 
 [OPML解析类](http://blog.donews.com/limodou/archive/2005/12/25/670385.aspx)
 
