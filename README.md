@@ -88,6 +88,8 @@ password:gogoreader
 
 mysql-connector-python pip install mysql-connector-python
 
+sinaweibopy pip install sinaweibopy
+
 #未实现功能清单
 * rss源的录入页面
 * 根据tag进行分类（不同类型的link）
