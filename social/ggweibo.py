@@ -19,6 +19,7 @@ APP_KEY = '4228096170' # app key
 MY_APP_SECRET = '47b967f4877cf755f1b1fdebbddf63a7' # app secret
 REDIRECT_URL = 'http://afei2.sinaapp.com/' # callback url
 
+
 def get_shorturl(api,url_long):
     url_short = api.short_url.shorten.get(url_long=url_long).urls[0]["url_short"]
     #http://t.cn/z8iHJ3R,we don't need http://t.cn/
@@ -40,6 +41,8 @@ def calc_score(weibo_sharecount,weibo_commentcount,published_time,vote_count=0,g
     return score
 
 def main():
+    print datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
+    weibo_total_request = 0
     api = weibo.APIClient(APP_KEY, MY_APP_SECRET)
     #authorize_url = api.get_authorize_url(REDIRECT_URL)
     #
@@ -66,11 +69,12 @@ def main():
     max_id = cursor.fetchone()[0]
 
     index=0
-    strlimittime = (datetime.datetime.now() - datetime.timedelta(hours=12)).strftime('%Y-%m-%d %H:%m')
+    strlimittime = (datetime.datetime.now() - datetime.timedelta(hours=48)).strftime('%Y-%m-%d %H:%m')
     while(index<=max_id):
-        cursor.execute("select id,published_time,url,short_url,weibo_sharecount,weibo_commentcount from links_link "
-                       "where published_time>'%s' id>%d order by id asc limit %d"%(strlimittime,index,STEP))
+        cursor.execute("select id,published_time,url,short_url,weibo_sharecount,weibo_commentcount from links_link " \
+                       "where published_time>'%s' and id>%d order by id asc limit %d"%(strlimittime,index,STEP))
         result = cursor.fetchall()
+        print "24'hours url count:",len(result)
         for id,published_time,url,short_url,weibo_sharecount,weibo_commentcount in result:
             try:
                 #whether the short url is initial.
@@ -78,8 +82,12 @@ def main():
                 if "" == short_url or short_url is None:
                     short_url_none = True
                     short_url = get_shorturl(api,url)
+                    weibo_total_request += 1
+
                 weibo_sharecount_new = int(get_sharecount(api,short_url))
                 weibo_commentcount_new = int(get_commentcount(api,short_url))
+                weibo_total_request += 2
+
                 ##because the weibo limit the request,so now we just get the repost count,and ignore the comment count.
                 ##weibo_commentcount_new = 0
 
@@ -92,11 +100,18 @@ def main():
                                weibo_commentcount=weibo_commentcount_new,published_time=published_time,vote_count=0)
                     update_sql = "update links_link set short_url='%s',rank_score=%f,weibo_sharecount=%d,weibo_commentcount=%d where id=%d" \
                                  %(short_url,score,weibo_sharecount_new,weibo_commentcount_new,id)
-                    print update_sql
+                    #print update_sql
                     cursor.execute( update_sql )
-
-            except Exception as e:
+            except weibo.APIError as e:
+                print datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
                 print e
+                print weibo_total_request
+                return
+            except Exception as e:
+                print datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
+                print type(e)
+                print e
+                return
 
         index += STEP
 
