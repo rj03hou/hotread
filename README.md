@@ -34,48 +34,46 @@ user:gogoreader
 
 password:gogoreader
 ###SQL
-···SQL
-CREATE TABLE `links_link` (
-`id` int(11) NOT NULL AUTO_INCREMENT,
-`title` varchar(100) NOT NULL,
-`submitter_id` int(11) NOT NULL,
-`published_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-`rank_score` double NOT NULL,
-`url` varchar(250) NOT NULL,
-`description` longtext NOT NULL,
-`short_url` varchar(20) DEFAULT '',
-`source` varchar(255) DEFAULT '',
-`weibo_sharecount` int(10) unsigned NOT NULL DEFAULT '0',
-`weibo_commentcount` int(10) unsigned NOT NULL DEFAULT '0',
-`tag_id` int(11) NOT NULL,
-PRIMARY KEY (`id`),
-UNIQUE KEY `uniq_url` (`url`),
-KEY `links_link_5f7282ee` (`submitter_id`),
-CONSTRAINT `submitter_id_refs_id_ac29084f` FOREIGN KEY (`submitter_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB
+	CREATE TABLE `links_link` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`title` varchar(100) NOT NULL,
+	`submitter_id` int(11) NOT NULL,
+	`published_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`rank_score` double NOT NULL,
+	`url` varchar(250) NOT NULL,
+	`description` longtext NOT NULL,
+	`short_url` varchar(20) DEFAULT '',
+	`source` varchar(255) DEFAULT '',
+	`weibo_sharecount` int(10) unsigned NOT NULL DEFAULT '0',
+	`weibo_commentcount` int(10) unsigned NOT NULL DEFAULT '0',
+	`tag_id` int(11) NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE KEY `uniq_url` (`url`),
+	KEY `links_link_5f7282ee` (`submitter_id`),
+	CONSTRAINT `submitter_id_refs_id_ac29084f` FOREIGN KEY (`submitter_id`) REFERENCES `auth_user` (`id`)
+	) ENGINE=InnoDB
 
-CREATE TABLE `links_tag` (
-`id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(100) NOT NULL,
-`submitter_id` int(11) NOT NULL,
-`published_time` datetime NOT NULL,
-PRIMARY KEY (`id`),
-KEY `links_tag_5f7282ee` (`submitter_id`),
-CONSTRAINT `submitter_id_refs_id_9bd4c3d9` FOREIGN KEY (`submitter_id`) REFERENCES `auth_user` (`id`)
-)
+	CREATE TABLE `links_tag` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`name` varchar(100) NOT NULL,
+	`submitter_id` int(11) NOT NULL,
+	`published_time` datetime NOT NULL,
+	PRIMARY KEY (`id`),
+	KEY `links_tag_5f7282ee` (`submitter_id`),
+	CONSTRAINT `submitter_id_refs_id_9bd4c3d9` FOREIGN KEY (`submitter_id`) REFERENCES `auth_user` (`id`)
+	)
 
-CREATE TABLE `links_rsssource` (
-`id` int(11) NOT NULL AUTO_INCREMENT,
-`title` varchar(255) NOT NULL,
-`published_time` datetime NOT NULL,
-`description` longtext NOT NULL,
-`tag_id` int(11) NOT NULL,
-`url` varchar(250) NOT NULL,
-PRIMARY KEY (`id`),
-KEY `links_rsssource_5659cca2` (`tag_id`),
-CONSTRAINT `tag_id_refs_id_76b63e16` FOREIGN KEY (`tag_id`) REFERENCES `links_tag` (`id`)
-)
-```
+	CREATE TABLE `links_rsssource` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`title` varchar(255) NOT NULL,
+	`published_time` datetime NOT NULL,
+	`description` longtext NOT NULL,
+	`tag_id` int(11) NOT NULL,
+	`url` varchar(250) NOT NULL,
+	PRIMARY KEY (`id`),
+	KEY `links_rsssource_5659cca2` (`tag_id`),
+	CONSTRAINT `tag_id_refs_id_76b63e16` FOREIGN KEY (`tag_id`) REFERENCES `links_tag` (`id`)
+	)
 ###依赖
 
 [django version:1.5.2](https://www.djangoproject.com/)
