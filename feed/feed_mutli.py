@@ -5,10 +5,15 @@ from urlparse import urlparse
 from future import Future
 from datetime import date, datetime, timedelta
 import threading
+import time
 
 import sys
 import feedparser
 import mysql.connector
+import socket
+
+timeout=10
+socket.setdefaulttimeout(timeout)
 
 config = {
     'user': 'gogoreader',
@@ -73,16 +78,21 @@ def get_feeds(feed_urls):
         url = ""
         mutex.acquire()
         if len(feed_urls) == 0:
+            print "the feed_url length is 0,so break"
             #todo close connection
             return
         else:
+            print "the feed_url length is:",len(feed_urls)
             item = feed_urls.pop()
             url = item['url']
             tag_id = item['tag_id']
         mutex.release()
-        print url,tag_id
         try:
+            start = time.time()
             feed = feedparser.parse(url)
+            consume = time.time() - start
+            outputinfo = url + " " + str(tag_id) + " " + str(len(feed['items'])) + " " + str(consume)
+            print outputinfo
             for item in feed['items']:
                 published_time = item["updated"]
                 title = item["title"]
@@ -92,12 +102,12 @@ def get_feeds(feed_urls):
 
                 data = published_time.split()
                 try:
-                    time = data[3] + '-' + date_map[data[2]] + '-' + data[1] + ' ' + data[4]
+                    ftime = data[3] + '-' + date_map[data[2]] + '-' + data[1] + ' ' + data[4]
                 except:
-                    time = published_time
+                    ftime = published_time
                     pass
 
-                line = (title, '3', time, '0', link, source, tag_id)
+                line = (title, '3', ftime, '0', link, source, tag_id)
                 #print line
                 insert = ("INSERT IGNORE INTO links_link"
                           "(title, submitter_id, published_time, rank_score, url, source, tag_id) "
@@ -110,6 +120,7 @@ def get_feeds(feed_urls):
                 #close connections
         except Exception as e:
             print e
+
 
 
 
@@ -130,7 +141,4 @@ if __name__ == "__main__":
 
     for t in threads:
         t.join()
-
-
-
 
