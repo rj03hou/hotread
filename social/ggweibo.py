@@ -36,7 +36,11 @@ def get_commentcount(api,url_short):
 # get the score for rank, the following is the hacknews score.
 # Score = (P-1) / (T+2)^G
 def calc_score(weibo_sharecount,weibo_commentcount,published_time,vote_count=0,gravity=1.8):
-    hour_age = (datetime.datetime.now() - published_time).seconds / 60 / 60
+
+    hour_age = 24
+    if published_time is not None:
+        time_delta = datetime.datetime.now() - published_time
+        hour_age = time_delta.days*24 + time_delta.seconds / 60 / 60
     score = (vote_count*1 + weibo_sharecount*1.5 + weibo_commentcount*1.3 ) / pow((hour_age + 2), gravity)
     return score
 
@@ -70,17 +74,50 @@ def main():
 
     strlimittime = (datetime.datetime.now() - datetime.timedelta(hours=48)).strftime('%Y-%m-%d %H:%m')
     print "strlimittime:",strlimittime
-    cursor.execute("select id,published_time,url,short_url,weibo_sharecount,weibo_commentcount from links_link " \
-                   "where published_time>'%s'"%(strlimittime))
-    result = cursor.fetchall()
-    print "24'hours url count:",len(result)
 
+    #before 24 hours, only re calc the score, not to fetch the weibo sharecount and commentcount
+    cursor.execute("select count(*) from links_link " \
+                   "where published_time<='%s'"%(strlimittime))
+    count = cursor.fetchone()[0]
+    print "before 24'hours url count:",count
+    index=0
+    while(index<=max_id):
+        cursor.execute("select id,published_time,url,short_url,weibo_sharecount,weibo_commentcount from links_link " \
+                       "where published_time<='%s' and id>%d order by id asc limit %d"%(strlimittime,index,STEP))
+        result = cursor.fetchall()
+        result_len = len(result)
+        if 0 == result_len:
+            break
+        print "index",index,result_len
+        for id,published_time,url,short_url,weibo_sharecount,weibo_commentcount in result:
+            try:
+                #we need to calc the score, because through the time, the score is become smaller and smaller.
+                score = calc_score(weibo_sharecount=weibo_sharecount,
+                                   weibo_commentcount=weibo_commentcount,published_time=published_time,vote_count=0)
+                update_sql = "update links_link set short_url='%s',rank_score=%f,weibo_sharecount=%d,weibo_commentcount=%d where id=%d" \
+                             %(short_url,score,weibo_sharecount,weibo_commentcount,id)
+                #print update_sql
+                cursor.execute( update_sql )
+            except Exception as e:
+                print datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
+                print type(e)
+                print e
+                return
+        index = int(result[result_len-1][0])
+
+
+    #in 24 hours, should fetch the weibo sharecount and comment
+    cursor.execute("select count(*) from links_link " \
+                   "where published_time>'%s'"%(strlimittime))
+    count = cursor.fetchone()[0]
+    print "24'hours url count:",count
     index=0
     while(index<=max_id):
         cursor.execute("select id,published_time,url,short_url,weibo_sharecount,weibo_commentcount from links_link " \
                        "where published_time>'%s' and id>%d order by id asc limit %d"%(strlimittime,index,STEP))
         result = cursor.fetchall()
-        print "index",index,len(result)
+        result_len = len(result)
+        print "index",index,result_len
         for id,published_time,url,short_url,weibo_sharecount,weibo_commentcount in result:
             try:
                 #whether the short url is initial.
@@ -99,15 +136,13 @@ def main():
 
                 print short_url,weibo_sharecount_new,weibo_commentcount_new
 
-                #if the count change or the short url is not initial, just update it.
-                if( short_url_none or weibo_sharecount != weibo_sharecount_new
-                    or weibo_commentcount != weibo_commentcount_new):
-                    score = calc_score(weibo_sharecount=weibo_sharecount_new,
-                               weibo_commentcount=weibo_commentcount_new,published_time=published_time,vote_count=0)
-                    update_sql = "update links_link set short_url='%s',rank_score=%f,weibo_sharecount=%d,weibo_commentcount=%d where id=%d" \
-                                 %(short_url,score,weibo_sharecount_new,weibo_commentcount_new,id)
-                    #print update_sql
-                    cursor.execute( update_sql )
+                #we need to calc the score, because through the time, the score is become smaller and smaller.
+                score = calc_score(weibo_sharecount=weibo_sharecount_new,
+                           weibo_commentcount=weibo_commentcount_new,published_time=published_time,vote_count=0)
+                update_sql = "update links_link set short_url='%s',rank_score=%f,weibo_sharecount=%d,weibo_commentcount=%d where id=%d" \
+                             %(short_url,score,weibo_sharecount_new,weibo_commentcount_new,id)
+                #print update_sql
+                cursor.execute( update_sql )
             except weibo.APIError as e:
                 print datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
                 print e
@@ -118,7 +153,6 @@ def main():
                 print type(e)
                 print e
                 return
-
-        index += STEP
+        index = int(result[result_len-1][0])
 
 main()
