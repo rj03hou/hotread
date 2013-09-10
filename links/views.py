@@ -41,11 +41,12 @@ def show_profile(request,tag_id=0):
     if tag_id == 0:
         link_lists = Link.objects.all().order_by('-rank_score')[:50]
     else:
-        link_lists = Link.objects.filter(tag_id=tag_id).order_by('-rank_score')[:50]
+        link_lists = Link.objects.filter(tag_id=tag_id).order_by('-rank_score')[:2]
     content_list = []
     for link in link_lists:
         #hours = (datetime.datetime.now()-link.published_time.replace(tzinfo=None)).seconds/60/60
-        hours = (datetime.datetime.now()-link.published_time).seconds/60/60
+        timedelta = datetime.datetime.now()-link.published_time
+        hours = timedelta.days*24 + timedelta.seconds/60/60
         content_list.append({"link":link,"hours":hours})
 
     template = loader.get_template('home.html')
