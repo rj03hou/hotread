@@ -41,7 +41,7 @@ def show_profile(request,tag_id=0):
     if tag_id == 0:
         link_lists = Link.objects.all().order_by('-rank_score')[:50]
     else:
-        link_lists = Link.objects.filter(tag_id=tag_id).order_by('-rank_score')[:2]
+        link_lists = Link.objects.filter(tag_id=tag_id).order_by('-rank_score')[:50]
     content_list = []
     for link in link_lists:
         #hours = (datetime.datetime.now()-link.published_time.replace(tzinfo=None)).seconds/60/60
