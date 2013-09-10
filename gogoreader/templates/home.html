@@ -18,7 +18,7 @@
         <ul>
             {% for content in content_list %}
                  <li type="1" class="list">
-                    <span><a id="{{content.link.id}}" onclick="return vote(this)">  <img class="img_attr" src="{{ STATIC_URL }}img/grayarrow.gif" border="0" vspace="3" hspace="2"> </a></span>
+                    <span><a id="{{content.link.id}}" onclick="return vote(this)">  <img class="like_png" src="{{ STATIC_URL }}img/like.png"> </a></span>
                     <span class="link_list_title"><a href="{{ content.link.url }}">{{ content.link.title }}</a></span>
                     <span class="link_list_description">{{ content.link.source }}</span>
                     <br>

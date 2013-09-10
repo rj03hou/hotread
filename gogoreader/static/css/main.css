@@ -65,3 +65,6 @@ button, input[type="button"], input[type="reset"], input[type="submit"]
 {
     margin-left: 300px;
 }
+img {
+    width: 15px;
+}

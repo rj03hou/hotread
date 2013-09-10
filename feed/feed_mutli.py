@@ -76,10 +76,11 @@ def get_feeds(feed_urls):
     global mutex
     while True:
         url = ""
-        mutex.acquire()
+        mutex.acquire(2)
         if len(feed_urls) == 0:
             print "the feed_url length is 0,so break"
             #todo close connection
+            mutex.release()
             return
         else:
             print "the feed_url length is:",len(feed_urls)
@@ -87,6 +88,7 @@ def get_feeds(feed_urls):
             url = item['url']
             tag_id = item['tag_id']
         mutex.release()
+
         try:
             start = time.time()
             feed = feedparser.parse(url)
