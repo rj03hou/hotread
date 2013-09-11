@@ -6,9 +6,9 @@ from django.views.generic.edit import DeleteView
 from django.core.urlresolvers import reverse, reverse_lazy
 import datetime
 
-from .models import Link, Vote, UserProfile, Tag
+from .models import Link, Vote, UserProfile, Tag, RssSource
 from .forms import UserProfileForm
-from .forms import LinkForm
+from .forms import LinkForm, RssSourceForm
 from django.shortcuts import render
 
 from django.http import HttpResponse
@@ -79,6 +79,15 @@ class LinkCreateView(CreateView):
 		f.save()
 		return super(LinkCreateView, self).form_valid(form)
 
+class RssCreateView(CreateView):
+    model = RssSource
+    form_class = RssSourceForm
+
+    def form_valid(self, form):
+        f = form.save(commit=False)
+        f.submitter = self.request.user
+        f.save()
+        return super(RssCreateView, self).form_valid(form)
 
 class LinkListView(ListView):
 	model = Link

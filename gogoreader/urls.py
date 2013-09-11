@@ -7,6 +7,7 @@ admin.autodiscover()
 
 from links.views import LinkListView
 from links.views import LinkCreateView
+from links.views import RssCreateView
 from links.views import LinkDetailView
 from links.views import LinkUpdateView
 from links.views import LinkDeleteView
@@ -38,6 +39,7 @@ urlpatterns = patterns('',
     url(r'^users/(?P<slug>\w+)/$', UserProfileDetailView.as_view(), name="profile"),
     url(r'edit_profile/$', auth(UserProfileEditView.as_view()), name='edit_profile'),
     url(r'^link/create/$', auth(LinkCreateView.as_view()), name='link_create'),
+    url(r'^rss/create/$', auth(RssCreateView.as_view()), name='rss_create'),
     url(r'^link/update/(?P<pk>\d+)/$', auth(LinkUpdateView.as_view()), name='link_update'),
     url(r'^link/delete/(?P<pk>\d+)/$', auth(LinkDeleteView.as_view()), name='link_delete'),
     url(r'^link/(?P<pk>\d+)$', LinkDetailView.as_view(), name='link_detail'),
