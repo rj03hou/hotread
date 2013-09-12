@@ -31,12 +31,14 @@ import simplejson as json
 	objects = models.Manager() # default Manager
 '''
 
-def show_tag_links(request,pk):
+
+def show_tag_links(request, pk):
     tag_id = int(pk)
-    return show_profile(request,tag_id)
+    return show_profile(request, tag_id)
     #return HttpResponse("hello world!%d"%tag_id)
 
-def show_profile(request,tag_id=0):
+
+def show_profile(request, tag_id=0):
     tag_list = Tag.objects.all()[:50]
     if tag_id == 0:
         link_lists = Link.objects.all().order_by('-rank_score')[:50]
@@ -45,39 +47,40 @@ def show_profile(request,tag_id=0):
     content_list = []
     for link in link_lists:
         #hours = (datetime.datetime.now()-link.published_time.replace(tzinfo=None)).seconds/60/60
-        timedelta = datetime.datetime.now()-link.published_time
-        hours = timedelta.days*24 + timedelta.seconds/60/60
-        content_list.append({"link":link,"hours":hours})
+        timedelta = datetime.datetime.now() - link.published_time
+        hours = timedelta.days * 24 + timedelta.seconds / 60 / 60
+        content_list.append({"link": link, "hours": hours})
 
     template = loader.get_template('home.html')
     context = RequestContext(request, {
-		'content_list':content_list,'tag_list':tag_list
-	})
+    'content_list': content_list, 'tag_list': tag_list
+    })
     return HttpResponse(template.render(context))
 
 
 def post_data(request):
-	data = { 'code': 200, }
-	name = request.GET.get('v', '')
-	if not name:
-		data['code'] = 1000
-	else:
-		link_lists = Link.objects.filter(id=name)
-		link_lists.weibo_commentcount +=1
-		link_lists.save()
-	return HttpResponse(json.dumps(data))
+    data = {'code': 200, }
+    name = request.GET.get('v', '')
+    if not name:
+        data['code'] = 1000
+    else:
+        link_lists = Link.objects.filter(id=name)
+        link_lists.weibo_commentcount += 1
+        link_lists.save()
+    return HttpResponse(json.dumps(data))
 
 
 class LinkCreateView(CreateView):
-	model = Link
-	form_class = LinkForm
-	
-	def form_valid(self, form):
-		f = form.save(commit=False)
-		f.rank_score = 0.0
-		f.submitter = self.request.user
-		f.save()
-		return super(LinkCreateView, self).form_valid(form)
+    model = Link
+    form_class = LinkForm
+
+    def form_valid(self, form):
+        f = form.save(commit=False)
+        f.rank_score = 0.0
+        f.submitter = self.request.user
+        f.save()
+        return super(LinkCreateView, self).form_valid(form)
+
 
 class RssCreateView(CreateView):
     model = RssSource
@@ -86,42 +89,54 @@ class RssCreateView(CreateView):
     def form_valid(self, form):
         f = form.save(commit=False)
         f.submitter = self.request.user
-        f.save()
-        return super(RssCreateView, self).form_valid(form)
+        try:
+            check_uniq = RssSource.objects.get(url=f.url)
+        except RssSource.DoesNotExist:
+            f.save()
+        else:
+            return HttpResponse("The url already exist.")
+        return HttpResponse("The rsssource save success.")
+        #return super(RssCreateView, self).form_valid(form)
+
 
 class LinkListView(ListView):
-	model = Link
-	query = Link.with_votes.all()
-	paginate_by = 5
+    model = Link
+    query = Link.with_votes.all()
+    paginate_by = 5
+
 
 class LinkDetailView(DetailView):
-	model = Link
+    model = Link
+
 
 class LinkUpdateView(UpdateView):
-	model = Link
-	form_class = LinkForm
+    model = Link
+    form_class = LinkForm
+
 
 class LinkDeleteView(DeleteView):
-	model = Link
-	success_url = reverse_lazy('home');
+    model = Link
+    success_url = reverse_lazy('home');
+
 
 class UserProfileDetailView(DetailView):
-	model = get_user_model()
-	slug_field = 'username'
-	template_name = 'user_detail.html'
+    model = get_user_model()
+    slug_field = 'username'
+    template_name = 'user_detail.html'
 
-	def get_object(self, queryset=None):
-		user = super(UserProfileDetailView, self).get_object(queryset)
-		UserProfile.objects.get_or_create(user=user)
-		return user
+    def get_object(self, queryset=None):
+        user = super(UserProfileDetailView, self).get_object(queryset)
+        UserProfile.objects.get_or_create(user=user)
+        return user
+
 
 class UserProfileEditView(UpdateView):
-	model = get_user_model()
-	template_name = 'edit_profile.html'
-	form_class = UserProfileForm
+    model = get_user_model()
+    template_name = 'edit_profile.html'
+    form_class = UserProfileForm
 
-	def get_object(self, queryset=None):
-		return UserProfile.objects.get_or_create(user=self.request.user)[0]
+    def get_object(self, queryset=None):
+        return UserProfile.objects.get_or_create(user=self.request.user)[0]
 
-	def get_success_url(self):
-		return reverse('profile', kwargs={'slug': self.request.user})
+    def get_success_url(self):
+        return reverse('profile', kwargs={'slug': self.request.user})
