@@ -4,6 +4,7 @@ import weibo
 import webbrowser
 import MySQLdb
 import datetime
+import traceback
 
 CONF={
         'user':'gogoreader',
@@ -41,6 +42,8 @@ def calc_score(weibo_sharecount,weibo_commentcount,published_time,vote_count=0,g
     if published_time is not None:
         time_delta = datetime.datetime.now() - published_time
         hour_age = time_delta.days*24 + time_delta.seconds / 60 / 60
+    if hour_age<0:
+        hour_age=999
     score = (vote_count*1 + weibo_sharecount*1.5 + weibo_commentcount*1.3 ) / pow((hour_age + 2), gravity)
     return score
 
@@ -145,13 +148,12 @@ def main():
                 cursor.execute( update_sql )
             except weibo.APIError as e:
                 print datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
-                print e
+		print traceback.print_exc()
                 print weibo_total_request
                 return
             except Exception as e:
                 print datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
-                print type(e)
-                print e
+		print traceback.print_exc()
                 return
         index = int(result[result_len-1][0])
 
