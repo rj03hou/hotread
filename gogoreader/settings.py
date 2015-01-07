@@ -14,9 +14,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'gogoreader',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'gogoreader',
-        'PASSWORD': 'gogoreader',
-        'HOST': '192.168.2.108',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '5002',                      # Set to empty string for default.
     }
 }
@@ -83,7 +83,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'd@ce42tk6)*pw1n=290(tn62k%(72xzr6b!d(yf%t^k9@g9q&+'
+SECRET_KEY = ''
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
