@@ -120,6 +120,8 @@ def main():
                        "where published_time>'%s' and id>%d order by id asc limit %d"%(strlimittime,index,STEP))
         result = cursor.fetchall()
         result_len = len(result)
+        if result_len == 0:
+            break
         print "index",index,result_len
         for id,published_time,url,short_url,weibo_sharecount,weibo_commentcount in result:
             try:
