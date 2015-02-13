@@ -84,11 +84,16 @@ password:gogoreader
 
 * [django version:1.5.2](https://www.djangoproject.com/)
 
+                tar -xvf Django-1.5.12.tar
+                python install.py install
+
 * [django-registration:1.0](https://pypi.python.org/packages/source/d/django-registration/django-registration-1.0.tar.gz)
 
 * [feedparser](https://code.google.com/p/feedparser/) 
 	
-		pip install feedparser
+                tar -xvf feedparser-5.1.3.tar.gz
+                python install.py install
+			
 
 * [OPML解析类](http://blog.donews.com/limodou/archive/2005/12/25/670385.aspx)
 
