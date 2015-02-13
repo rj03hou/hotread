@@ -2,8 +2,8 @@
 {% load comments %}
 
 <link href="{{ STATIC_URL }}css/show.css" rel="stylesheet" type="text/css" media="screen" />
-{% comment %}
 {% block content %}
+{% comment %}
 {% if tag_list %}
     {% for tag in tag_list %}
         <span class="tag">
