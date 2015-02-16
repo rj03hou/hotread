@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load comments %}
 
-<link href="{{ STATIC_URL }}css/show.css" rel="stylesheet" type="text/css" media="screen" />
 {% block content %}
 {% comment %}
 {% if tag_list %}
@@ -21,14 +20,14 @@
                  <li type="1" class="list">
                     <!--span><a id="{{content.link.id}}" onclick="return vote(this)">  <img class="like_png" src="{{ STATIC_URL }}img/like.png"> </a></span-->
                     <span class="link_list_title"><a href="{{ content.link.url }}">{{ content.link.title }}</a></span>
-                    <span class="link_list_description">{{ content.link.source }}</span>
                     <br>
-                    <div class = "small">
+                    <div class="description">
                         <form id="myform">
                             <span class="link_list_rank_score">hot:{{ content.link.rank_score | floatformat:2 }}</span>
-                            <span>微博转发:{{ content.link.weibo_sharecount }}</span>
-                            <span class="link_list_submitter">{{ content.link.submitter }}</span>
-                            <span class="link_list_submitted_on">{{ content.hours }}小时前发表</span>
+                            <span>weibo:{{ content.link.weibo_sharecount }}</span>
+                            <!--span class="link_list_submitter">{{ content.link.submitter }}</span-->
+                            <span class="link_list_submitted_on">time:{{ content.hours }}</span>
+                            <span class="link_list_description">{{ content.link.source }}</span>
                             <!--span class="link_list_comment">
                                 <a href="{% url 'link_detail' pk=content.link.pk %}">
 			                        {% get_comment_count for content.link as comment_count %}

@@ -1,13 +1,18 @@
 .content {
-  font-size: 16px;
+  font-size: 20px;
   text-align: left;
   padding: 5px 5px 5px 5px;
+  margin: 0 auto;
+  width: 900px;
+}
+#header {
+  margin: 0 auto;
+  width: 900px;
+
 }
 
 .content li{
-  height:35px;
   margin:5px;
-  padding:4px;
 }
 
 .content li.list span {
@@ -18,10 +23,9 @@
   width: 15px;
 }
 
-.content div.small{
-  margin:4px 4px;
-  padding: 15px
-  font-size: x-small;
+.description{
+  margin:5px 5px;
+  font-size: 18px;
   color : #888;
 }
 
@@ -49,17 +53,16 @@
 
 .content li.list span.link_list_title {
   width: 60px;
-  margin-left:5px;
+  margin: 5px;
 }
 
 .content li.list span.link_list_rank_score {
   width: 20px;
-  margin-left:5px;
 }
 
 .content li.list span.link_list_submitter {
   width: 40px;
-  margin-left:5px;
+  margin-left:10px;
 }
 
 .content li.list span.link_list_submitted_on {
@@ -84,6 +87,3 @@
   width: 150px;
   box-shadow: 0 14px 4px -10px #333;
 }
-
-
-
