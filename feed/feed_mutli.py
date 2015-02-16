@@ -18,7 +18,7 @@ socket.setdefaulttimeout(timeout)
 config = {
     'user': 'gogoreader',
     'password': 'gogoreader',
-    'host': '192.168.2.108',
+    'host': '127.0.0.1',
     'port': '5002',
     'database': 'gogoreader',
     'charset': 'utf8'

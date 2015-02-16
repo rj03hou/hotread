@@ -10,7 +10,7 @@ CONF={
         'user':'gogoreader',
         'passwd':'gogoreader',
         'port':5002,
-        'host':'192.168.2.108',
+        'host':'127.0.0.1',
         'db':'gogoreader',
         'charset':'utf8'
 }

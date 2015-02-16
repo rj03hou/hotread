@@ -2,8 +2,8 @@
 {% load comments %}
 
 <link href="{{ STATIC_URL }}css/show.css" rel="stylesheet" type="text/css" media="screen" />
-
 {% block content %}
+{% comment %}
 {% if tag_list %}
     {% for tag in tag_list %}
         <span class="tag">
@@ -13,12 +13,13 @@
         </span> -
     {% endfor %}
 {% endif %}
+{% endcomment %}
 {% if content_list %}
     <div class="content">
         <ul>
             {% for content in content_list %}
                  <li type="1" class="list">
-                    <span><a id="{{content.link.id}}" onclick="return vote(this)">  <img class="like_png" src="{{ STATIC_URL }}img/like.png"> </a></span>
+                    <!--span><a id="{{content.link.id}}" onclick="return vote(this)">  <img class="like_png" src="{{ STATIC_URL }}img/like.png"> </a></span-->
                     <span class="link_list_title"><a href="{{ content.link.url }}">{{ content.link.title }}</a></span>
                     <span class="link_list_description">{{ content.link.source }}</span>
                     <br>
@@ -28,12 +29,12 @@
                             <span>微博转发:{{ content.link.weibo_sharecount }}</span>
                             <span class="link_list_submitter">{{ content.link.submitter }}</span>
                             <span class="link_list_submitted_on">{{ content.hours }}小时前发表</span>
-                            <span class="link_list_comment">
+                            <!--span class="link_list_comment">
                                 <a href="{% url 'link_detail' pk=content.link.pk %}">
 			                        {% get_comment_count for content.link as comment_count %}
 			                        {{ comment_count }}条评论
 		                        </a>
-                            </span>
+                            </span-->
                             <span class="submit-info">
                             </span>
                         </form>
