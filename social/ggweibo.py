@@ -36,7 +36,7 @@ def get_commentcount(api,url_short):
 
 # get the score for rank, the following is the hacknews score.
 # Score = (P-1) / (T+2)^G
-def calc_score(weibo_sharecount,weibo_commentcount,published_time,vote_count=0,gravity=1.8):
+def calc_score(weibo_sharecount,weibo_commentcount,published_time,vote_count=0,gravity=2):
 
     hour_age = 24
     if published_time is not None:
@@ -97,6 +97,7 @@ def main():
                 #we need to calc the score, because through the time, the score is become smaller and smaller.
                 score = calc_score(weibo_sharecount=weibo_sharecount,
                                    weibo_commentcount=weibo_commentcount,published_time=published_time,vote_count=0)
+                #print score
                 update_sql = "update links_link set short_url='%s',rank_score=%f,weibo_sharecount=%d,weibo_commentcount=%d where id=%d" \
                              %(short_url,score,weibo_sharecount,weibo_commentcount,id)
                 #print update_sql
@@ -150,12 +151,12 @@ def main():
                 cursor.execute( update_sql )
             except weibo.APIError as e:
                 print datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
-		print traceback.print_exc()
+                print traceback.print_exc()
                 print weibo_total_request
                 return
             except Exception as e:
                 print datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
-		print traceback.print_exc()
+                print traceback.print_exc()
                 return
         index = int(result[result_len-1][0])
 
